@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Track - Jadwal Kuliah Saya</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #eef2ff;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background-color: #2d4a7a;
+            color: #ffffff;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .section-container {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin: 25px;
+            padding: 25px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2d4a7a;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group select {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #2d4a7a;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .btn-tambah {
+            background-color: #2d4a7a;
+            color: white;
+        }
+
+        .btn-reset {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-hapus {
+            background-color: #e3342f;
+            color: white;
+            padding: 8px 15px;
+        }
+
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-container label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .filter-container select {
+            padding: 8px 12px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background-color: #2d4a7a;
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 14px;
+        }
+
+        tbody td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            color: #333;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: #888;
+            font-size: 0.82rem;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        
+        <header>
+            <h1>StudyTrack</h1>
+            <p>Jadwal Kuliah Saya</p>
+        </header>
+
+        <div class="section-container">
+            <h2 class="section-title">Tambah Jadwal</h2>
+            <form id="jadwalForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mataKuliah">Mata Kuliah</label>
+                        <input type="text" id="mataKuliah" placeholder="Contoh: Pemrograman Web">
+                    </div>
+                    <div class="form-group">
+                        <label for="hari">Hari</label>
+                        <select id="hari">
+                            <option value="">-- Pilih Hari --</option>
+                            <option value="Senin">Senin</option>
+                            <option value="Selasa">Selasa</option>
+                            <option value="Rabu">Rabu</option>
+                            <option value="Kamis">Kamis</option>
+                            <option value="Jumat">Jumat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jam">Jam</label>
+                        <input type="text" id="jam" placeholder="Contoh: 08:00 - 10:00">
+                    </div>
+                    <div class="form-group">
+                        <label for="ruangan">Ruangan</label>
+                        <input type="text" id="ruangan" placeholder="Contoh: Lab Komputer A">
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn-tambah" onclick="tambahJadwal()">Tambah Jadwal</button>
+                    <button type="button" class="btn-reset" onclick="resetSemua()">Reset Semua</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="section-container">
+            <h2 class="section-title">Daftar Jadwal</h2>
+            
+            <div class="filter-container">
+                <label for="filterHari">Filter Hari:</label>
+                <select id="filterHari" onchange="renderTable()">
+                    <option value="Semua">Semua</option>
+                    <option value="Senin">Senin</option>
+                    <option value="Selasa">Selasa</option>
+                    <option value="Rabu">Rabu</option>
+                    <option value="Kamis">Kamis</option>
+                    <option value="Jumat">Jumat</option>
+                </select>
+            </div>
+
+            <table id="tabelJadwal">
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="30%">Mata Kuliah</th>
+                        <th width="15%">Hari</th>
+                        <th width="20%">Jam</th>
+                        <th width="20%">Ruangan</th>
+                        <th width="10%">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyJadwal">
+                    <tr id="emptyRow">
+                        <td colspan="6" class="empty-message">Belum ada jadwal. Silakan tambahkan jadwal di atas.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        let daftarJadwal = [];
+
+        function tambahJadwal() {
+            const matkul = document.getElementById('mataKuliah').value.trim();
+            const hari = document.getElementById('hari').value;
+            const jam = document.getElementById('jam').value.trim();
+            const ruangan = document.getElementById('ruangan').value.trim();
+
+            if (!matkul || !hari || !jam || !ruangan) {
+                alert("Semua field harus diisi!");
+                return;
+            }
+
+            const jadwalBaru = {
+                id: Date.now(),
+                matkul: matkul,
+                hari: hari,
+                jam: jam,
+                ruangan: ruangan
+            };
+            
+            daftarJadwal.push(jadwalBaru);
+
+            document.getElementById('jadwalForm').reset();
+
+            renderTable();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tbodyJadwal');
+            const filterValue = document.getElementById('filterHari').value;
+            
+            const filtered = filterValue === 'Semua'
+            ? daftarJadwal
+            : daftarJadwal.filter(j => j.hari === filterValue);
+
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr id="emptyRow"><td colspan="6" class="empty-message">Belum ada jadwal. Silakan tambahkan jadwal di atas.</td></tr>`;
+                return;
+            }
+
+            const dataDitampilkan = daftarJadwal.filter(jadwal => {
+                if (filterValue === 'Semua') return true;
+                return jadwal.hari === filterValue;
+            });
+
+            dataDitampilkan.forEach((jadwal, index) => {
+                const tr = document.createElement('tr');
+
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${jadwal.matkul}</td>
+                    <td>${jadwal.hari}</td>
+                    <td>${jadwal.jam}</td>
+                    <td>${jadwal.ruangan}</td>
+                    <td>
+                        <button class="btn-hapus" onclick="hapusJadwal(${jadwal.id})">Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function hapusJadwal(id) {
+            daftarJadwal = daftarJadwal.filter(jadwal => jadwal.id !== id);
+            
+            renderTable(); 
+        }
+
+        function resetSemua() {
+            document.getElementById('jadwalForm').reset();
+            document.getElementById('filterHari').value = 'Semua';
+            
+            daftarJadwal = [];
+
+            renderTable();
+        }
+    </script>
+</body>
+</html>
